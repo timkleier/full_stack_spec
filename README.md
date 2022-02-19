@@ -9,7 +9,8 @@ There are hundreds of languages and frameworks for building web and mobile appli
 
 Core terminology represents ubiquitous concepts that apply to all levels of the stack. An event or relationship may have different implications in the UI versus the data layer, but they are fundamentally necessary and fill the same function across the stack.
 
-## Example Core Specification (Draft)
+## Examples
+### Core Specification (Draft)
 ```yaml
 # YAML
 entities:
@@ -44,6 +45,22 @@ configuration:
     environments: [development, staging, production]
 ```
 This represents a core specification, anticipating a need to overlay UI, API, and/or data layer specifications. Events would likely be represented in those specs, as it's hard to conceptualize an event that would take place across the entire stack. 
+
+### Event Specification (Draft)
+```yaml
+events:
+  create_post:
+    input: post
+    output: post
+    subscribable: true # enables access/subscription/notification
+    authorization:
+      users: null # no specific users (in general) are authorized to create a post
+      roles: [admin] # the admin role can create a post
+      scoped: [author] # authors are allowed to create a post associated with them
+    relationships:
+      entity: post
+      triggering: author
+```
 
 ## Research/Influences
 
