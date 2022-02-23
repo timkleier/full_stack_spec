@@ -1,17 +1,18 @@
 # Full Stack Architectural Specification
-There are hundreds of languages and frameworks for building web and mobile applications, but no set of simple standards to describe the problems they commonly solve. Crafted by the open source community, this specification aims to establish a set of language and framework agnostic instructions for building web and mobile apps. 
+There are hundreds of languages and frameworks for building web and mobile applications, but no set of simple standards to describe the problems they commonly solve. Crafted by the open source community, this specification aims to establish a set of language and framework agnostic instructions for building web and mobile apps.
 
 ## Core Concepts
-* **Entity** - Most commonly a business object, such as a product or service. 
-* **Relationship** - Represents a connection between two (or more?) Entities. Standard relationships are 1-1, 1-N, N-N. 
-* **Event** - An action in the system, triggered by a human or machine actor. Anything from a button click to a background job. 
-* **Attribute** - Attributes and their values describe an Entity or Event, such as a product that has a price (attribute) of $10 (value) or a scheduled job that runs with a frequency (attribute) of daily (value). 
+* **Entity** - Most commonly a business object, such as a product or service.
+* **Relationship** - Represents a connection between two (or more?) Entities. Standard relationships are 1-1, 1-N, N-N.
+* **Event** - An action in the system, triggered by a human or machine actor. Anything from a button click to a background job.
+* **Attribute** - Attributes and their values describe an Entity or Event, such as a product that has a price (attribute) of $10 (value) or a scheduled job that runs with a frequency (attribute) of daily (value).
 
 Core terminology represents ubiquitous concepts that apply to all levels of the stack. An event or relationship may have different implications in the UI versus the data layer, but they are fundamentally necessary and fill the same function across the stack.
 
-## Example Core Specification (Draft)
+## Example Specifications
+
+### Entities
 ```yaml
-# YAML
 entities:
   post:
     attributes:
@@ -34,16 +35,40 @@ entities:
       last_name: string
     relationships:
       post: N-N
+```
+
+### Events
+
+```yaml
+events:
+  data:
+    entities:
+      post: crud
+        subscribable: true # enables access/subscription/notification
+        authorization:
+          users: null # no specific users (in general) are authorized
+          roles: [admin] # the admin role can create a post
+          triggering: [author, admin] # authors and admins are allowed to create a post
+      comment: crd
+      author: crud
+  notifications:
+    email:
+      default_sender: hello@example.com
+    sms:
+      sender_number: 555-555-5555
+```
+
+### Deployment
+```yaml
 configuration:
   stack:
     layers:
       data: true
       api: true
       ui: false # headless
-  deployment:
-    environments: [development, staging, production]
+  environments: [development, staging, production]
 ```
-This represents a core specification, anticipating a need to overlay UI, API, and/or data layer specifications. Events would likely be represented in those specs, as it's hard to conceptualize an event that would take place across the entire stack. 
+This represents a core specification, anticipating a need to overlay UI, API, and/or data layer specifications. Events would likely be represented in those specs, as it's hard to conceptualize an event that would take place across the entire stack.
 
 ## Research/Influences
 
