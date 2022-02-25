@@ -58,6 +58,40 @@ events:
       sender_number: 555-555-5555
 ```
 
+### UI Flow
+```yaml
+steps:
+  page: 'Products'
+    path: '/products'
+    parts:
+      entities
+      events
+    get_data: product
+
+```
+
+### UI Element
+```yaml
+elements:
+  table:
+    collection:
+      entity: post
+      actions: [view, edit, delete]
+    options: [sortable, filterable, paginateable, searchable]
+  card:
+    image: '/image.png' # or full URL
+    title: 'New post'
+    labels: [tag1, tag2]
+    link: '/post/:id'
+  menu:
+    item:
+      link: '/posts'
+      label: 'Posts'
+    item:
+      link: '/authors'
+      label: 'Authors'
+```
+
 ### Deployment
 ```yaml
 configuration:
