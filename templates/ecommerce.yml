@@ -1,0 +1,47 @@
+# Ecommerce Template
+workflow:
+  - page: 'login'
+    render_form:
+      fields:
+        email:
+          label: 'email'
+          validation: email_validation # supplied by implementation
+        password:
+          label: 'password'
+          validation: password_validation # supplied by implementation
+      submit_button:
+        label: 'Login'
+        action: create_session # supplied by implementation
+        nav_to: '/products' # assumed it's after session creation
+  - page: '/products'
+    render_header: Products
+    render_cards:
+      collection:
+        read_entity: [product]
+      each:
+        attributes: [image, title, description, price]
+        display_elements: [attributes, add_to_cart_button]
+        actions:
+          - nav_to: '/products/:id'
+            bound_to: [image, title]
+            type: click # the default
+            with: { id: product.id }
+          - nav_to: '/cart'
+            bound_to: add_to_cart_button
+            type: click
+            create_entity: cart_item
+  - page: '/cart'
+    render_header: Cart
+    render_list:
+      read_entity: [cart_item]
+        attributes: [product.title, product.price, quantity]
+        scope: current_user
+    render_button:
+      label: 'Submit Order'
+      actions: # TODO represent these as successive
+        - create_entity: order
+        - nav_to: '/submit_order'
+  - page: '/order_confirmation'
+    render_header: Order Confirmation
+    render_section:
+      read_entity: order # TODO: connect to previous page?
